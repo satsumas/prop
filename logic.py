@@ -29,9 +29,9 @@ elif r_val == "F":
 else:
     print "Enter T or F"
 
-"""parser
+"""parser for binary connectives.
 will only accept expressions with two variables
-and a single connective, and or or.
+and a single connective: or, and, arrow, iff.
 """
 
 tokens = s.split(" ")
@@ -48,7 +48,7 @@ def fetch_value(token):
         return r
 
 # we want k to be the index of "or" in the list tokens...
-# tokens[k] = "or"
+# tokens[k] = "connective -- or, and, etc."
 
 for (i, token) in enumerate(tokens):
     if token == "or":
@@ -57,11 +57,19 @@ for (i, token) in enumerate(tokens):
     elif token == "and":
         def f(a, b):
             return a and b
+    elif token == "arrow":
+        def f(a, b):
+            return not a or b
+    elif token == "iff":
+        def f(a, b):
+            return (a and b) or (not a and not b)
     else:
         continue
     flank_1 = tokens[i - 1]
     flank_2 = tokens[i + 1]
     result = f(fetch_value(flank_1), fetch_value(flank_2))
+
+
 
 
 """convert to disjunctive normal form"""
