@@ -1,5 +1,18 @@
 #!/usr/bin/python
 
+class Not(object):
+    """
+    NOT expression.  Can have one sub-expression.
+    """
+    def __init__(self, sub):
+        self.sub = sub
+
+
+    def render(self):
+        return "NEG " + self.sub.render()
+
+
+
 class Or(object):
     """
     OR expression.  Can have sub-expressions.

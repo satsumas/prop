@@ -22,6 +22,10 @@ t_IFF = r'IFF'
 t_LPAREN  = r'\('
 t_RPAREN  = r'\)'
 
+precedence = (
+        ('right', 'NOT'),
+        ('left', 'ARROW', 'OR', 'AND', 'IFF'),
+        )
 
 # Define a rule so we can track line numbers
 def t_newline(t):
@@ -39,18 +43,16 @@ def t_error(t):
 # Build the lexer
 lexer = lex.lex()
 
+if __name__ == "__main__":
+    #test it out
+    data = '((p OR q) ARROW         r) '
 
+    # Give the lexer some input
+    lexer.input(data)
 
-#test it out
-data = '((p OR q) ARROW         r)'
-
-# Give the lexer some input
-lexer.input(data)
-
-
-# Tokenize
-while True:
-    tok = lexer.token()
-    if not tok: break      # No more input
-    print tok
+    # Tokenize
+    while True:
+        tok = lexer.token()
+        if not tok: break      # No more input
+        print tok
 
