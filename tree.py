@@ -9,7 +9,8 @@ class Not(object):
 
 
     def render(self):
-        return "NEG " + self.sub.render()
+        return "Not(%s)" % (self.sub.render(),)
+        #return "NEG " + self.sub.render()
 
 
 
@@ -23,7 +24,8 @@ class Or(object):
 
 
     def render(self):
-        return "(" + self.lhs.render() + " OR " + self.rhs.render() + ")"
+        return "Or(%s, %s)" % (self.lhs.render(), self.rhs.render())
+        #return "(" + self.lhs.render() + " OR " + self.rhs.render() + ")"
 
 
 
@@ -37,7 +39,8 @@ class And(object):
 
 
     def render(self):
-        return "(" + self.lhs.render() + " AND " + self.rhs.render() + ")"
+        return "And(%s, %s)" % (self.lhs.render(), self.rhs.render())
+        #return "(" + self.lhs.render() + " AND " + self.rhs.render() + ")"
 
 
 
