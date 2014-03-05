@@ -53,13 +53,56 @@ def p_error(p):
 # Build the parser
 parser = yacc.yacc()
 
+
+"""
 while True:
-   try:
-       s = raw_input('prop > ')
-   except EOFError:
-       break
-   if not s: continue
-   result = parser.parse(s)
-   print result.render()
+    try:
+        s = raw_input('prop > ')
+    except EOFError:
+        break
+    if not s:
+        continue
+    result = parser.parse(s) 
+    print result.render()
+"""
+
+# The tex code that prints a tree
+tex_str = r"""
+
+\documentclass[10pt,english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amssymb}
+\usepackage{qtree}
+\begin{document}
+ %s
+\end{document} """ 
+
+s = raw_input('prop > ')
+result = parser.parse(s) 
+print result.render()
+
+
+# Prints latex for tree that branches on connective AND or OR with widest scope.
+if isinstance(result, And):
+    print "string is And!"
+    print "disjunct 1 is %s and disjunct 2 is %s" %(result.lhs.render(), result.rhs.render())
+    tree = r"\Tree [.{%s} {%s\\%s} ])"  %  (result.render(), result.lhs.render(), result.rhs.render())
+    tex_str = tex_str % (tree)
+
+
+if isinstance(result, Or):
+    print "its an Or!"
+    print "disjunct 1 is %s and disjunct 2 is %s" %(result.lhs.render(), result.rhs.render())
+    tree = "\Tree [.{%s} {%s} [.{%s} Sublevel ]])"  %  (result.render(), result.lhs.render(), result.rhs.render())
+    tex_str = tex_str % (tree)
+
+
+f = open("output.tex", "w")
+f.write(tex_str)
+f.write(str(result.render()))
+
+f.close
+
 
 
