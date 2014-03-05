@@ -7,12 +7,9 @@ class Not(object):
     def __init__(self, sub):
         self.sub = sub
 
-
     def render(self):
         return "Not(%s)" % (self.sub.render(),)
-        #return "NEG " + self.sub.render()
-
-
+        #return "NOT " + self.sub.render()
 
 class Or(object):
     """
@@ -22,12 +19,9 @@ class Or(object):
         self.lhs = lhs
         self.rhs = rhs
 
-
     def render(self):
         return "Or(%s, %s)" % (self.lhs.render(), self.rhs.render())
         #return "(" + self.lhs.render() + " OR " + self.rhs.render() + ")"
-
-
 
 class And(object):
     """
@@ -37,12 +31,9 @@ class And(object):
         self.lhs = lhs
         self.rhs = rhs
 
-
     def render(self):
         return "And(%s, %s)" % (self.lhs.render(), self.rhs.render())
         #return "(" + self.lhs.render() + " AND " + self.rhs.render() + ")"
-
-
 
 class PropVar(object):
     """
@@ -51,11 +42,8 @@ class PropVar(object):
     def __init__(self, name):
         self.name = name
 
-
     def render(self):
         return self.name
-
-
 
 if __name__ == "__main__": #if the file is being run as a program (and not being imported as a module)
     expr = And(Or(PropVar('p'), PropVar('q')), PropVar('r'))
