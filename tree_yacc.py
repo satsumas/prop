@@ -68,14 +68,14 @@ while True:
 
 # The tex code that prints a tree
 tex_str = r"""
-
 \documentclass[10pt,english]{article}
 \usepackage[T1]{fontenc}
 \usepackage[latin9]{inputenc}
 \usepackage{amssymb}
 \usepackage{qtree}
-\begin{document}
- %s
+\begin{document} 
+Tree:
+\Tree [%s]
 \end{document} """ 
 
 s = raw_input('prop > ')
@@ -84,19 +84,33 @@ print result.render()
 
 
 # Prints latex for tree that branches on connective AND or OR with widest scope.
-if isinstance(result, And):
+# Don't forget trailing space at the end of the string to be subbed into tree; 
+# need space before closing square brackets in qtree.
+def and_branch(s):
     print "string is And!"
-    print "disjunct 1 is %s and disjunct 2 is %s" %(result.lhs.render(), result.rhs.render())
-    tree = r"\Tree [.{%s} {%s\\%s} ])"  %  (result.render(), result.lhs.render(), result.rhs.render())
+    print "disjunct 1 is %s and disjunct 2 is %s" %(s.lhs.render(), s.rhs.render())
+    tree = r".{%s} {%s\\%s} "  %  (s.render(), s.lhs.render(), s.rhs.render())
+    global tex_str
     tex_str = tex_str % (tree)
 
-
-if isinstance(result, Or):
+def or_branch(s):
     print "its an Or!"
-    print "disjunct 1 is %s and disjunct 2 is %s" %(result.lhs.render(), result.rhs.render())
-    tree = "\Tree [.{%s} {%s} [.{%s} Sublevel ]])"  %  (result.render(), result.lhs.render(), result.rhs.render())
+    print "disjunct 1 is %s and disjunct 2 is %s" %(s.lhs.render(), s.rhs.render())
+    tree = r".{%s} {%s} {%s} "  %  (s.render(), s.lhs.render(), s.rhs.render())
+    global tex_str
     tex_str = tex_str % (tree)
 
+def branch(s):
+    if isinstance(s, Or):
+        or_branch(s)
+    elif isinstance(s, And):
+        and_branch(s)
+    global s1
+    global s2
+    s1 = s.lhs
+    s2 = s.rhs
+
+branch(result)
 
 f = open("output.tex", "w")
 f.write(tex_str)
