@@ -1,0 +1,54 @@
+\documentclass[10pt,english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amssymb}
+\usepackage{qtree}
+\begin{document} 
+\Tree [.{Or(p, g)} {p} {g} ]
+"Or branches" are denoted by 3-tuples: {\bf [head branch1 branch2]}.\newline
+\newline
+"And" branches are coded with 2tuples, {\bf [head branch1]}.\newline
+\newline
+Heads are denoted with leading dots.
+\vspace{2em}
+\newline
+\Tree [.ORbranch1 branch2 branch3 ]
+\vspace{2em}
+\newline
+Replace branch3 with [.branch3 branch3.1 branch3.2 ]:
+\vspace{2em}
+\newline
+\Tree [.ORbranch1 branch2  [.branch3 branch3.1 branch3.2 ] ]
+\vspace{2em}
+\newline
+\Tree [.ANDbranch1 branch2 ]
+\vspace{2em}
+\newline
+\Tree [.ANDbranch1 [.branch2 branch3 ] ]
+\vspace{10em}
+\newline
+compound proposition AND:
+\Tree [.{((a OR b) AND q)} [.{q\\(a OR b)} ] ]
+\Tree [.{((a OR b) AND q)} [.{q\\(a OR b)} a b ] ]
+
+
+
+[.Root [.Disjunct1 Disjunct1.1 Disjunct1.2 ] Disjunct2 ]
+
+[.Disjunct1 Disjunct1.1 Disjunct1.2 ]
+[.Disjunct2
+
+
+[.[.Branch1 Branch2]  Branch6 Branch7]
+
+\Tree [.{((a AND b) AND (q AND p))} [ .{(q AND p)\\(a AND b)} [.{a\\b} [.{p\\q} ] ] ] ]
+\Tree [.{(((a AND b) AND (q AND p)) AND (g AND b))} [ .{((a AND b) AND (q AND p))\\(g AND b)} [.{(a AND b)\\(q AND p)} [.{g\\b}  ] ] ] ]
+\Tree [.{((a AND b) AND q)} [ .{q\\(a AND b)} [.{a\\b} ] ] ]
+
+
+
+\vspace{10em}compound proposition OR:
+
+\Tree [.{((a AND b) OR q)} [.{(a AND b)} a\\b ] q ] 
+
+\end{document}
