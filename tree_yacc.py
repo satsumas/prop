@@ -75,7 +75,7 @@ tex_str = r"""
 \usepackage{qtree}
 \begin{document} 
 Tree:
-\Tree [%s]
+\Tree %s
 \end{document} """ 
 
 s = raw_input('prop > ')
@@ -83,39 +83,13 @@ result = parser.parse(s)
 print result.render()
 
 
-# Prints latex for tree that branches on connective AND or OR with widest scope.
-# Don't forget trailing space at the end of the string to be subbed into tree; 
-# need space before closing square brackets in qtree.
-def and_branch(s):
-    print "string is And!"
-    print "disjunct 1 is %s and disjunct 2 is %s" %(s.lhs.render(), s.rhs.render())
-    tree = r".{%s} {%s\\%s} "  %  (s.render(), s.lhs.render(), s.rhs.render())
-    global tex_str
-    tex_str = tex_str % (tree)
 
-def or_branch(s):
-    print "its an Or!"
-    print "disjunct 1 is %s and disjunct 2 is %s" %(s.lhs.render(), s.rhs.render())
-    tree = r".{%s} {%s} {%s} "  %  (s.render(), s.lhs.render(), s.rhs.render())
-    global tex_str
-    tex_str = tex_str % (tree)
+tex_str = tex_str % (result.render_branch())
 
-def branch(s):
-    if isinstance(s, Or):
-        or_branch(s)
-    elif isinstance(s, And):
-        and_branch(s)
-    global s1
-    global s2
-    s1 = s.lhs
-    s2 = s.rhs
 
-branch(result)
 
 f = open("output.tex", "w")
 f.write(tex_str)
-f.write(str(result.render()))
-
 f.close
 
 

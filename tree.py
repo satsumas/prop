@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+import ply.yacc as yacc
+
 class Not(object):
     """
     NOT expression.  Can have one sub-expression.
@@ -52,16 +54,23 @@ class And(object):
         return "And(%s, %s)" % (self.lhs.render(), self.rhs.render())
         #return "(" + self.lhs.render() + " AND " + self.rhs.render() + ")"
 
+    def root(self):
+        return r".{%s}" % (self.render())
 
     def render_escaped_expansion(self):
         return r"{%s\\%s }" % (self.lhs.render(), self.rhs.render())
 
-
-    def render_branch(self):
-        # [.{%s} {%s\\%s} [. xxx ] ]
-        # [.{%s} {%s\\%s} [. xxx ] ]
-        return r"[.{%s} {%s\\%s } ]" % (self.render(), self.lhs.render_branch(), self.rhs.render_branch())
+    def branch(self):
+        # the recursive bit
+        if isinstance (self.lhs, PropVar) and isinstance(self.rhs, PropVar):
+            return r"%s   " % (self.render_escaped_expansion())  
+        if isinstance (self.lhs, And) and isinstance(self.rhs, And):
+            return r"[.%s [.%s %s ] ]" % (self.render_escaped_expansion(), "[." + self.lhs.render_escaped_expansion() + "[ [." + self.lhs.lhs.branch + " " + self.lhs.rhs.branch + " ]", self.rhs.branch() + " ]")  
  
+    def render_branch(self):
+        #root plus recursive bit
+        return r"[%s %s ] " % (self.root(), self.branch())
+
 
 class PropVar(object):
     """
@@ -73,7 +82,7 @@ class PropVar(object):
     def render(self):
         return self.name
 
-    def render_branch(self):
+    def branch(self):
         return r"%s" % (self.render())
 
 
