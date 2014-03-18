@@ -37,9 +37,3 @@ class Qtree(object):
             results.append(branch.render())
         return "[.%s %s ]" % (self._escapedRoot(), " ".join(results))
 
-
-    def renderTree(self):
-        r"""
-        Render a tree including the starting '\Tree' part.
-        """
-        return r"\Tree %s" % (self.render(),)

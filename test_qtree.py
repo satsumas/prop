@@ -14,7 +14,7 @@ class QtreeTests(TestCase):
         head
         """
         q = Qtree("head")
-        self.assertEqual(q.renderTree(), r"\Tree [.{head}  ]")
+        self.assertEqual(q.renderTree(), r"[.{head}  ]")
 
 
     def test_oneBranch(self):
@@ -24,7 +24,7 @@ class QtreeTests(TestCase):
         tail
         """
         q = Qtree("head", [Qtree("tail")])
-        self.assertEqual(q.renderTree(), r"\Tree [.{head} [.{tail}  ] ]")
+        self.assertEqual(q.renderTree(), r"[.{head} [.{tail}  ] ]")
 
 
     def test_twoBranches(self):
@@ -34,7 +34,7 @@ class QtreeTests(TestCase):
         tail tail2
         """
         q = Qtree("head", [Qtree("tail"), Qtree("tail2")])
-        self.assertEqual(q.renderTree(), r"\Tree [.{head} [.{tail}  ] [.{tail2}  ] ]")
+        self.assertEqual(q.renderTree(), r"[.{head} [.{tail}  ] [.{tail2}  ] ]")
 
 
     def test_twoBranchesDeep(self):
@@ -48,7 +48,7 @@ class QtreeTests(TestCase):
         q = Qtree("head", [
                 Qtree("tail", [
                     Qtree("tail2")])])
-        self.assertEqual(q.renderTree(), r"\Tree [.{head} [.{tail} [.{tail2}  ] ] ]")
+        self.assertEqual(q.renderTree(), r"[.{head} [.{tail} [.{tail2}  ] ] ]")
 
 
     def test_newlines(self):
@@ -59,4 +59,4 @@ class QtreeTests(TestCase):
         tailpartB
         """
         q = Qtree("head", [Qtree("tailpartA\ntailpartB")])
-        self.assertEqual(q.renderTree(), r"\Tree [.{head} [.{tailpartA\\tailpartB}  ] ]")
+        self.assertEqual(q.render(), r"[.{head} [.{tailpartA\\tailpartB}  ] ]")

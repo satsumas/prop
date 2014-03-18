@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import ply.yacc as yacc
+from qtree import Qtree
 
 class Not(object):
     """
@@ -23,6 +24,8 @@ class Or(object):
     """
     OR expression.  Can have sub-expressions.
     """
+    isComplex = True
+
     def __init__(self, lhs, rhs):
         self.lhs = lhs
         self.rhs = rhs
@@ -39,12 +42,18 @@ class Or(object):
 
     def render_branch(self):
         return r"[.{%s} %s %s ]" % (self.render(), self.lhs.render_branch(), self.rhs.render_branch())
-        
+
+
+    def qtree(self):
+        return Qtree(self.render(), [self.lhs.qtree(), self.rhs.qtree()])
+
 
 class And(object):
     """
     AND expression.  Can have sub-expressions.
     """
+    isComplex = True
+
     def __init__(self, lhs, rhs):
         self.lhs = lhs
         self.rhs = rhs
@@ -72,10 +81,25 @@ class And(object):
         return r"[%s %s ] " % (self.root(), self.branch())
 
 
+    def _newlineHead(self):
+        return "%s\n%s" % (self.lhs.render(), self.rhs.render())
+
+    def qtree(self):
+
+        subQtreeBranches = []
+        if self.lhs.isComplex:
+            lhsQtree = self.lhs.qtree()
+            subQtreeBranches.append(lhsQtree)
+
+        return Qtree(self.render(), [Qtree(self._newlineHead(), subQtreeBranches)])
+
+
 class PropVar(object):
     """
     E.g., 'p' or 'q'.
     """
+    isComplex = False
+
     def __init__(self, name):
         self.name = name
 
@@ -84,6 +108,13 @@ class PropVar(object):
 
     def branch(self):
         return r"%s" % (self.render())
+
+    def qtree(self):
+        """
+        Given the expression that is self, return a Qtree which can be rendered
+        into the LaTeX we want to output.
+        """
+        return Qtree(self.render())
 
 
 if __name__ == "__main__": #if the file is being run as a program (and not being imported as a module)
