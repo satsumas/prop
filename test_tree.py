@@ -3,6 +3,7 @@ Tests for the expression => Qtree layer.
 """
 
 from tree import PropVar, And, Or, Not
+import os
 
 from unittest import TestCase
 from qtree import Qtree
@@ -17,7 +18,7 @@ class ConversionTests(TestCase):
         its own.
         """
         p = PropVar('p')
-        self.assertEqual(p.qtree().render(), Qtree('p').render())
+        self.assertEqual(p.getSubTree().render(), Qtree('p').render())
 
 
     def test_or(self):
@@ -31,7 +32,7 @@ class ConversionTests(TestCase):
         """
         p = Or(PropVar('p'), PropVar('q'))
         expectedOutput = Qtree("Or(p, q)", [Qtree("p"), Qtree("q")])
-        self.assertEqual(p.qtree().render(), expectedOutput.render()) 
+        self.assertEqual(p.getSubTree().render(), expectedOutput.render())
 
 
     def test_and(self):
@@ -46,7 +47,7 @@ class ConversionTests(TestCase):
         """
         p = And(PropVar('p'), PropVar('q'))
         expectedOutput = Qtree("And(p, q)", [Qtree("p\nq")])
-        self.assertEqual(p.qtree().render(), expectedOutput.render()) 
+        self.assertEqual(p.getSubTree().render(), expectedOutput.render())
 
 
 
@@ -62,14 +63,33 @@ class ConversionTests(TestCase):
         expectedOutput = Qtree("Or(p, Or(z, q))",
                                [Qtree("p"), Qtree("Or(z, q)",
                                                   [Qtree("z"), Qtree("q")])])
-        self.assertEqual(p.qtree().render(), expectedOutput.render()) 
+        self.assertEqual(p.getSubTree().render(), expectedOutput.render())
 
+
+    def _renderDebugOutput(self, actual, expected):
+        tex = r"""\documentclass[10pt,english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amssymb}
+\usepackage{qtree}
+\begin{document}
+EXP
+
+\Tree %s
+
+ACTUAL
+
+\Tree %s
+\end{document}
+        """ % (expected, actual)
+        f = open("/tmp/output.tex", "w")
+        f.write(tex)
+        f.close()
+        os.system("cd /tmp; pdflatex output.tex")
 
 
     def test_complexAnd(self):
         r"""
-        WANT
-
         And(And(p, q), r)
          |
         And(p, q)
@@ -77,17 +97,57 @@ class ConversionTests(TestCase):
          |
          p
          q
-
-        GOT
-        And(And(p, q), r)
-         |
-        And(p, q)
-         r
         """
         p = And(And(PropVar('p'), PropVar('q')), PropVar('r'))
         expectedOutput = Qtree("And(And(p, q), r)",
                                [Qtree("And(p, q)\nr",
                                    [Qtree("p\nq")])])
-        self.assertEqual(p.qtree().render(), expectedOutput.render()) 
+        actual = p.getSubTree().render()
+        expected = expectedOutput.render()
+        self.assertEqual(actual, expected)
+
+
+    def test_complexAndRightHand(self):
+        r"""
+        And(r, And(p, q))
+         |
+         r
+        And(p, q)
+         |
+         p
+         q
+        """
+        p = And(PropVar('r'), And(PropVar('p'), PropVar('q')))
+        expectedOutput = Qtree("And(r, And(p, q))",
+                               [Qtree("r\nAnd(p, q)",
+                                   [Qtree("p\nq")])])
+        actual = p.getSubTree().render()
+        expected = expectedOutput.render()
+        self.assertEqual(actual, expected)
+
+
+    def test_complexDoubleAnd(self):
+        r"""
+        And(And(a, b), And(c, d))
+         |
+        And(a, b)
+        And(c, d)
+         |
+         a
+         b
+         |
+         c
+         d
+        """
+        p = And(And(PropVar('a'), PropVar('b')),
+                And(PropVar('c'), PropVar('d')))
+        expectedOutput = Qtree("And(And(a, b), And(c, d))",
+                               [Qtree("And(a, b)\nAnd(c, d)",
+                                   [Qtree("a\nb",
+                                       [Qtree("c\nd")])])])
+        actual = p.getSubTree().render()
+        expected = expectedOutput.render()
+        self._renderDebugOutput(actual, expected)
+        self.assertEqual(actual, expected)
 
 
