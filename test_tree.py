@@ -151,3 +151,45 @@ ACTUAL
         self.assertEqual(actual, expected)
 
 
+    def test_complexQuadrupalAnd(self):
+        r"""
+        And(And(And(a, b), And(c, d), And(And(e, f), And(g, h))))
+         |
+        And(And(a, b), And(c, d))
+        And(And(e, f), And(g, h))
+         |
+        And(a, b)
+        And(c, d)
+         |
+        And(e, f)
+        And(g, h)
+         |
+         a
+         b
+         |
+         c
+         d
+         |
+         e
+         f
+         |
+         g
+         h
+        """
+        l = And(And(PropVar('a'), PropVar('b')),
+                And(PropVar('c'), PropVar('d')))
+        r = And(And(PropVar('e'), PropVar('f')),
+                And(PropVar('g'), PropVar('h')))
+        p = And(l, r)
+
+        expectedOutput = Qtree("And(And(a, b), And(c, d))",
+                               [Qtree("And(a, b)\nAnd(c, d)",
+                                   [Qtree("a\nb",
+                                       [Qtree("c\nd")])])])
+
+        actual = p.getSubTree().render()
+        expected = expectedOutput.render()
+        self._renderDebugOutput(actual, expected)
+        self.assertEqual(actual, expected)
+
+

@@ -16,15 +16,24 @@ class Qtree(object):
 
         @arg branches:  A list of Qtree objects.
         """
-        self.root = root
-        self.branches = branches
+        self._root = root
+        self._branches = branches
+
+
+    def addBranch(self, branch):
+        """
+        Add a new branch.
+
+        @param branch:  A Qtree.
+        """
+        self._branches.append(branch)
 
 
     def _escapedRoot(self):
         """
         Converts newlines into double backslashes and wraps curlies around it.
         """
-        return "{%s}" % (self.root.replace("\n", r"\\"),)
+        return "{%s}" % (self._root.replace("\n", r"\\"),)
 
 
     def render(self):
@@ -33,7 +42,7 @@ class Qtree(object):
         them.
         """
         results = []
-        for branch in self.branches:
+        for branch in self._branches:
             results.append(branch.render())
         return "[.%s %s ]" % (self._escapedRoot(), " ".join(results))
 

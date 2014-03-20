@@ -8,22 +8,48 @@ class TraversibleExpression(object):
     logic.
     """
     def __init__(self):
-        self._extraWork = None
+        self._stack = []
 
 
     def addWork(self, expression):
-        self._extraWork = expression
+        """
+        @arg expression: An Expression.
+        """
+        # TODO We might want to try changing this to 'insert(0, ...' to switch
+        # to DFS
+        self._stack.append(expression)
+
+
+    def popWork(self, expression):
+        """
+        Get the next expression which needs dealing with.
+        """
+        # Get last thing off the list
+        return self._stack.pop()
+
+
+    def hasWork(self):
+        """
+        Is there any work left to do?
+        """
+        return len(self._stack) > 0
 
 
     def getSubTree(self, elideRoot=False):
+        """
+        @return:  A Qtree instance.
+        """
+        myQtree = self.qtree(elideRoot=elideRoot)
         if self._extraWork:
-            print "returning extraWork", self._extraWork.render()
-            response = self._extraWork.getSubTree(elideRoot=elideRoot)
-            self._extraWork = None
-            return response
-        else:
-            print "returning qtree", self.render()
-            return self.qtree(elideRoot=elideRoot)
+            # Either, we can deal with the extra work immediately if we
+            # ourselves have no further branches:
+            if not myQtree._branches:
+                myQtree._branches.append(
+                        self._extraWork.getSubTree(elideRoot=elideRoot))
+                self._extraWork = None
+            # Or, we have branches, in which case we must punt the work down
+            # the tree.  How do we do this???
+        return myQtree
 
 
 
@@ -83,11 +109,18 @@ class And(TraversibleExpression):
         return "%s\n%s" % (self.lhs.render(), self.rhs.render())
 
 
+    def workToDo(self):
+        """
+        Return a list of expressions which still need to be evaluated.
+        """
+        return [self.lhs, self.rhs]
+
+
     def qtree(self, elideRoot=False):
         """
         For And expressions, render a subtree with each of the conjuncts
         separated by a newline as the head, and then proceed to recursively
-        expand each conjunct in turn.
+        expand each conjunct in turn, one at a time.
         """
         if self.lhs.isComplex and self.rhs.isComplex:
             self.lhs.addWork(self.rhs)
