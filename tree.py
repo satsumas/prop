@@ -1,17 +1,43 @@
 #!/usr/bin/python
 
-import ply.yacc as yacc
+from qtree import Qtree
+import copy
 
-class Not(object):
+class TraversibleExpression(object):
+    """
+    An expression which knows how to generate its own tree for propositional
+    logic.
+    """
+    def __init__(self):
+        self.stack = []
+
+
+    def getSubTree(self, elideRoot=False):
+        """
+        @return:  A Qtree instance.
+        """
+        myQtree = self.qtree(elideRoot=elideRoot)
+        if len(self.stack) > 0:
+            if not myQtree._branches:
+                # Either, we can deal with the extra work immediately if we
+                # ourselves have no further branches:
+                myQtree._branches.append(
+                        self.stack.pop().getSubTree(elideRoot=True))
+            else:
+                # Or, we have branches, in which case we must punt the work
+                # deeper into the tree.
+                self.punt(copy.copy(self.stack))
+                myQtree = self.qtree(elideRoot=elideRoot)
+        return myQtree
+
+
+class Not(TraversibleExpression):
     """
     NOT expression.  Can have one sub-expression.
     """
     def __init__(self, sub):
+        TraversibleExpression.__init__(self)
         self.sub = sub
-
-
-    def render_escaped_expansion(self):
-        return self.render()
 
 
     def render(self):
@@ -19,11 +45,14 @@ class Not(object):
         #return "NOT " + self.sub.render()
 
 
-class Or(object):
+class Or(TraversibleExpression):
     """
     OR expression.  Can have sub-expressions.
     """
+    isComplex = True
+
     def __init__(self, lhs, rhs):
+        TraversibleExpression.__init__(self)
         self.lhs = lhs
         self.rhs = rhs
 
@@ -33,57 +62,96 @@ class Or(object):
         #return "(" + self.lhs.render() + " OR " + self.rhs.render() + ")"
 
 
-    def render_escaped_expansion(self):
-        return self.render()
+    def qtree(self, elideRoot=False):
+        if elideRoot:
+            text = ""
+        else:
+            text = self.render()
+        return Qtree(text, [self.lhs.getSubTree(), self.rhs.getSubTree()])
 
 
-    def render_branch(self):
-        return r"[.{%s} %s %s ]" % (self.render(), self.lhs.render_branch(), self.rhs.render_branch())
-        
+    def punt(self, stuff):
+        self.lhs.stack.extend(stuff)
+        self.rhs.stack.extend(stuff)
 
-class And(object):
+
+
+class And(TraversibleExpression):
     """
     AND expression.  Can have sub-expressions.
     """
+    isComplex = True
+
     def __init__(self, lhs, rhs):
+        TraversibleExpression.__init__(self)
         self.lhs = lhs
         self.rhs = rhs
 
 
     def render(self):
         return "And(%s, %s)" % (self.lhs.render(), self.rhs.render())
-        #return "(" + self.lhs.render() + " AND " + self.rhs.render() + ")"
-
-    def root(self):
-        return r".{%s}" % (self.render())
-
-    def render_escaped_expansion(self):
-        return r"{%s\\%s }" % (self.lhs.render(), self.rhs.render())
-
-    def branch(self):
-        # the recursive bit
-        if isinstance (self.lhs, PropVar) and isinstance(self.rhs, PropVar):
-            return r"%s   " % (self.render_escaped_expansion())  
-        if isinstance (self.lhs, And) and isinstance(self.rhs, And):
-            return r"[.%s [.%s %s ] ]" % (self.render_escaped_expansion(), "[." + self.lhs.render_escaped_expansion() + "[ [." + self.lhs.lhs.branch + " " + self.lhs.rhs.branch + " ]", self.rhs.branch() + " ]")  
- 
-    def render_branch(self):
-        #root plus recursive bit
-        return r"[%s %s ] " % (self.root(), self.branch())
 
 
-class PropVar(object):
+    def _newlineHead(self):
+        return "%s\n%s" % (self.lhs.render(), self.rhs.render())
+
+
+    def qtree(self, elideRoot=False):
+        """
+        For And expressions, render a subtree with each of the conjuncts
+        separated by a newline as the head, and then proceed to recursively
+        expand each conjunct in turn, one at a time.
+        """
+        if self.lhs.isComplex and self.rhs.isComplex:
+            self.lhs.stack.append(self.rhs)
+
+        subQtreeBranches = []
+        if self.lhs.isComplex:
+            subQtreeBranches.append(self.lhs.getSubTree(elideRoot=True))
+        elif self.rhs.isComplex:
+            subQtreeBranches.append(self.rhs.getSubTree(elideRoot=True))
+
+        innerQtree = Qtree(self._newlineHead(), subQtreeBranches)
+        if elideRoot:
+            return innerQtree
+        else:
+            return Qtree(self.render(), [innerQtree])
+
+
+    def punt(self, stuff):
+        self.lhs.stack.extend(stuff)
+        self.rhs.stack.extend(stuff)
+
+
+class PropVar(TraversibleExpression):
     """
     E.g., 'p' or 'q'.
     """
+    isComplex = False
+
     def __init__(self, name):
+        TraversibleExpression.__init__(self)
         self.name = name
+
 
     def render(self):
         return self.name
 
+
     def branch(self):
         return r"%s" % (self.render())
+
+
+    def qtree(self, elideRoot=False):
+        """
+        Given the expression that is self, return a Qtree which can be rendered
+        into the LaTeX we want to output.
+        """
+        return Qtree(self.render())
+
+
+    def punt(self, stuff):
+        self.stack.extend(stuff)
 
 
 if __name__ == "__main__": #if the file is being run as a program (and not being imported as a module)
