@@ -46,3 +46,6 @@ class Qtree(object):
             results.append(branch.render())
         return "[.%s %s ]" % (self._escapedRoot(), " ".join(results))
 
+
+
+

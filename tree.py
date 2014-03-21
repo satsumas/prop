@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from qtree import Qtree
+import copy
 
 class TraversibleExpression(object):
     """
@@ -8,31 +9,7 @@ class TraversibleExpression(object):
     logic.
     """
     def __init__(self):
-        self._stack = []
-
-
-    def addWork(self, expression):
-        """
-        @arg expression: An Expression.
-        """
-        # TODO We might want to try changing this to 'insert(0, ...' to switch
-        # to DFS
-        self._stack.append(expression)
-
-
-    def popWork(self, expression):
-        """
-        Get the next expression which needs dealing with.
-        """
-        # Get last thing off the list
-        return self._stack.pop()
-
-
-    def hasWork(self):
-        """
-        Is there any work left to do?
-        """
-        return len(self._stack) > 0
+        self.stack = []
 
 
     def getSubTree(self, elideRoot=False):
@@ -40,17 +17,18 @@ class TraversibleExpression(object):
         @return:  A Qtree instance.
         """
         myQtree = self.qtree(elideRoot=elideRoot)
-        if self._extraWork:
-            # Either, we can deal with the extra work immediately if we
-            # ourselves have no further branches:
+        if len(self.stack) > 0:
             if not myQtree._branches:
+                # Either, we can deal with the extra work immediately if we
+                # ourselves have no further branches:
                 myQtree._branches.append(
-                        self._extraWork.getSubTree(elideRoot=elideRoot))
-                self._extraWork = None
-            # Or, we have branches, in which case we must punt the work down
-            # the tree.  How do we do this???
+                        self.stack.pop().getSubTree(elideRoot=True))
+            else:
+                # Or, we have branches, in which case we must punt the work
+                # deeper into the tree.
+                self.punt(copy.copy(self.stack))
+                myQtree = self.qtree(elideRoot=elideRoot)
         return myQtree
-
 
 
 class Not(TraversibleExpression):
@@ -85,7 +63,16 @@ class Or(TraversibleExpression):
 
 
     def qtree(self, elideRoot=False):
-        return Qtree(self.render(), [self.lhs.getSubTree(), self.rhs.getSubTree()])
+        if elideRoot:
+            text = ""
+        else:
+            text = self.render()
+        return Qtree(text, [self.lhs.getSubTree(), self.rhs.getSubTree()])
+
+
+    def punt(self, stuff):
+        self.lhs.stack.extend(stuff)
+        self.rhs.stack.extend(stuff)
 
 
 
@@ -109,13 +96,6 @@ class And(TraversibleExpression):
         return "%s\n%s" % (self.lhs.render(), self.rhs.render())
 
 
-    def workToDo(self):
-        """
-        Return a list of expressions which still need to be evaluated.
-        """
-        return [self.lhs, self.rhs]
-
-
     def qtree(self, elideRoot=False):
         """
         For And expressions, render a subtree with each of the conjuncts
@@ -123,7 +103,7 @@ class And(TraversibleExpression):
         expand each conjunct in turn, one at a time.
         """
         if self.lhs.isComplex and self.rhs.isComplex:
-            self.lhs.addWork(self.rhs)
+            self.lhs.stack.append(self.rhs)
 
         subQtreeBranches = []
         if self.lhs.isComplex:
@@ -137,6 +117,10 @@ class And(TraversibleExpression):
         else:
             return Qtree(self.render(), [innerQtree])
 
+
+    def punt(self, stuff):
+        self.lhs.stack.extend(stuff)
+        self.rhs.stack.extend(stuff)
 
 
 class PropVar(TraversibleExpression):
@@ -164,6 +148,10 @@ class PropVar(TraversibleExpression):
         into the LaTeX we want to output.
         """
         return Qtree(self.render())
+
+
+    def punt(self, stuff):
+        self.stack.extend(stuff)
 
 
 if __name__ == "__main__": #if the file is being run as a program (and not being imported as a module)
