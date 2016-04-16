@@ -31,7 +31,7 @@ class Qtree(object):
 
     def _escapedRoot(self):
         """
-        Converts newlines into double backslashes and wraps curlies around it.
+        Converts newlines into double backslashes and wraps curly brackets around it.
         """
         return "{%s}" % (self._root.replace("\n", r"\\"),)
 
