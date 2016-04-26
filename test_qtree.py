@@ -11,6 +11,7 @@ class QtreeTests(TestCase):
     """
     def test_trivial(self):
         """
+        This tests the rendering of trivial trees, like this:
         head
         """
         q = Qtree("head")
