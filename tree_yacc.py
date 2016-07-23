@@ -83,7 +83,8 @@ Tree:
 s = raw_input('prop > ')
 result = parser.parse(s) 
 print result
-"""
+
+
 if result:
     print result.getSubTree().render()
 
@@ -96,5 +97,5 @@ if result:
     os.system("pdflatex output.tex && open output.pdf")
 else:
     print "SOMETHING WENT WRONG :("
-"""
+
 
