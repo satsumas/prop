@@ -2,6 +2,7 @@
 """
 Grammar:
 
+Expressed in Backus Naur Form:
 
 compound_prop:  | PROP_VAR
                 | LPAREN compound_prop AND compound_prop RPAREN
@@ -9,25 +10,26 @@ compound_prop:  | PROP_VAR
                 | LPAREN compound_prop ARROW compound_prop RPAREN
                 | LPAREN compound_prop IFF compound_prop RPAREN
                 | NEG compound_prop
-
-In the grammar, symbols such as PROP_VAR, NEG, AND, OR, ARROW and IFF are known
-as terminals and correspond to raw input tokens. The identifier 'proposition'
-refers to grammar rules comprised of a collection of terminals and other rules
-and is a non-terminal. 
-
 """
+
+import os
 
 import ply.yacc as yacc
 from tree import Or, Not, And, PropVar
 
 from lexer import tokens
+# The following functions are based on David Baezley's parser. The indices that are used in the functions correspond to the words, in order, in the doc strings.
+
 def p_compound_prop_PROP_VAR(p):
     "compound_prop : PROP_VAR"
     p[0] = PropVar(p[1])
 
+# Here, p[0] is the result of calling PropVar on the 1st word (excluding the colon) in the doc string -- i.e. the PropVar itself.
+
 def p_compound_prop_NEG(p):
     "compound_prop : NEG compound_prop"
     p[0] = Not(p[2])
+# p[0] is Not(compound_prop)    
 
 def p_compound_prop_AND(p):
     "compound_prop : LPAREN compound_prop AND compound_prop RPAREN"
@@ -80,17 +82,19 @@ Tree:
 
 s = raw_input('prop > ')
 result = parser.parse(s) 
-print result.render()
+print result
+"""
+if result:
+    print result.getSubTree().render()
 
+    tex_str = tex_str % (result.getSubTree().render(),)
 
+    f = open("output.tex", "w")
+    f.write(tex_str)
+    f.close()
 
-tex_str = tex_str % (result.render_branch())
-
-
-
-f = open("output.tex", "w")
-f.write(tex_str)
-f.close
-
-
+    os.system("pdflatex output.tex && open output.pdf")
+else:
+    print "SOMETHING WENT WRONG :("
+"""
 

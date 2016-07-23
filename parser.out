@@ -1,0 +1,263 @@
+Created by PLY version 3.8 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> compound_prop
+Rule 1     compound_prop -> PROP_VAR
+Rule 2     compound_prop -> NEG compound_prop
+Rule 3     compound_prop -> LPAREN compound_prop AND compound_prop RPAREN
+Rule 4     compound_prop -> LPAREN compound_prop OR compound_prop RPAREN
+Rule 5     compound_prop -> LPAREN compound_prop ARROW compound_prop RPAREN
+Rule 6     compound_prop -> LPAREN compound_prop IFF compound_prop RPAREN
+
+Terminals, with rules where they appear
+
+AND                  : 3
+ARROW                : 5
+IFF                  : 6
+LPAREN               : 3 4 5 6
+NEG                  : 2
+OR                   : 4
+PROP_VAR             : 1
+RPAREN               : 3 4 5 6
+error                : 
+
+Nonterminals, with rules where they appear
+
+compound_prop        : 2 3 3 4 4 5 5 6 6 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . compound_prop
+    (1) compound_prop -> . PROP_VAR
+    (2) compound_prop -> . NEG compound_prop
+    (3) compound_prop -> . LPAREN compound_prop AND compound_prop RPAREN
+    (4) compound_prop -> . LPAREN compound_prop OR compound_prop RPAREN
+    (5) compound_prop -> . LPAREN compound_prop ARROW compound_prop RPAREN
+    (6) compound_prop -> . LPAREN compound_prop IFF compound_prop RPAREN
+
+    PROP_VAR        shift and go to state 3
+    NEG             shift and go to state 2
+    LPAREN          shift and go to state 4
+
+    compound_prop                  shift and go to state 1
+
+state 1
+
+    (0) S' -> compound_prop .
+
+
+
+state 2
+
+    (2) compound_prop -> NEG . compound_prop
+    (1) compound_prop -> . PROP_VAR
+    (2) compound_prop -> . NEG compound_prop
+    (3) compound_prop -> . LPAREN compound_prop AND compound_prop RPAREN
+    (4) compound_prop -> . LPAREN compound_prop OR compound_prop RPAREN
+    (5) compound_prop -> . LPAREN compound_prop ARROW compound_prop RPAREN
+    (6) compound_prop -> . LPAREN compound_prop IFF compound_prop RPAREN
+
+    PROP_VAR        shift and go to state 3
+    NEG             shift and go to state 2
+    LPAREN          shift and go to state 4
+
+    compound_prop                  shift and go to state 5
+
+state 3
+
+    (1) compound_prop -> PROP_VAR .
+
+    RPAREN          reduce using rule 1 (compound_prop -> PROP_VAR .)
+    $end            reduce using rule 1 (compound_prop -> PROP_VAR .)
+    AND             reduce using rule 1 (compound_prop -> PROP_VAR .)
+    OR              reduce using rule 1 (compound_prop -> PROP_VAR .)
+    ARROW           reduce using rule 1 (compound_prop -> PROP_VAR .)
+    IFF             reduce using rule 1 (compound_prop -> PROP_VAR .)
+
+
+state 4
+
+    (3) compound_prop -> LPAREN . compound_prop AND compound_prop RPAREN
+    (4) compound_prop -> LPAREN . compound_prop OR compound_prop RPAREN
+    (5) compound_prop -> LPAREN . compound_prop ARROW compound_prop RPAREN
+    (6) compound_prop -> LPAREN . compound_prop IFF compound_prop RPAREN
+    (1) compound_prop -> . PROP_VAR
+    (2) compound_prop -> . NEG compound_prop
+    (3) compound_prop -> . LPAREN compound_prop AND compound_prop RPAREN
+    (4) compound_prop -> . LPAREN compound_prop OR compound_prop RPAREN
+    (5) compound_prop -> . LPAREN compound_prop ARROW compound_prop RPAREN
+    (6) compound_prop -> . LPAREN compound_prop IFF compound_prop RPAREN
+
+    PROP_VAR        shift and go to state 3
+    NEG             shift and go to state 2
+    LPAREN          shift and go to state 4
+
+    compound_prop                  shift and go to state 6
+
+state 5
+
+    (2) compound_prop -> NEG compound_prop .
+
+    RPAREN          reduce using rule 2 (compound_prop -> NEG compound_prop .)
+    $end            reduce using rule 2 (compound_prop -> NEG compound_prop .)
+    AND             reduce using rule 2 (compound_prop -> NEG compound_prop .)
+    OR              reduce using rule 2 (compound_prop -> NEG compound_prop .)
+    ARROW           reduce using rule 2 (compound_prop -> NEG compound_prop .)
+    IFF             reduce using rule 2 (compound_prop -> NEG compound_prop .)
+
+
+state 6
+
+    (3) compound_prop -> LPAREN compound_prop . AND compound_prop RPAREN
+    (4) compound_prop -> LPAREN compound_prop . OR compound_prop RPAREN
+    (5) compound_prop -> LPAREN compound_prop . ARROW compound_prop RPAREN
+    (6) compound_prop -> LPAREN compound_prop . IFF compound_prop RPAREN
+
+    AND             shift and go to state 7
+    OR              shift and go to state 10
+    ARROW           shift and go to state 9
+    IFF             shift and go to state 8
+
+
+state 7
+
+    (3) compound_prop -> LPAREN compound_prop AND . compound_prop RPAREN
+    (1) compound_prop -> . PROP_VAR
+    (2) compound_prop -> . NEG compound_prop
+    (3) compound_prop -> . LPAREN compound_prop AND compound_prop RPAREN
+    (4) compound_prop -> . LPAREN compound_prop OR compound_prop RPAREN
+    (5) compound_prop -> . LPAREN compound_prop ARROW compound_prop RPAREN
+    (6) compound_prop -> . LPAREN compound_prop IFF compound_prop RPAREN
+
+    PROP_VAR        shift and go to state 3
+    NEG             shift and go to state 2
+    LPAREN          shift and go to state 4
+
+    compound_prop                  shift and go to state 11
+
+state 8
+
+    (6) compound_prop -> LPAREN compound_prop IFF . compound_prop RPAREN
+    (1) compound_prop -> . PROP_VAR
+    (2) compound_prop -> . NEG compound_prop
+    (3) compound_prop -> . LPAREN compound_prop AND compound_prop RPAREN
+    (4) compound_prop -> . LPAREN compound_prop OR compound_prop RPAREN
+    (5) compound_prop -> . LPAREN compound_prop ARROW compound_prop RPAREN
+    (6) compound_prop -> . LPAREN compound_prop IFF compound_prop RPAREN
+
+    PROP_VAR        shift and go to state 3
+    NEG             shift and go to state 2
+    LPAREN          shift and go to state 4
+
+    compound_prop                  shift and go to state 12
+
+state 9
+
+    (5) compound_prop -> LPAREN compound_prop ARROW . compound_prop RPAREN
+    (1) compound_prop -> . PROP_VAR
+    (2) compound_prop -> . NEG compound_prop
+    (3) compound_prop -> . LPAREN compound_prop AND compound_prop RPAREN
+    (4) compound_prop -> . LPAREN compound_prop OR compound_prop RPAREN
+    (5) compound_prop -> . LPAREN compound_prop ARROW compound_prop RPAREN
+    (6) compound_prop -> . LPAREN compound_prop IFF compound_prop RPAREN
+
+    PROP_VAR        shift and go to state 3
+    NEG             shift and go to state 2
+    LPAREN          shift and go to state 4
+
+    compound_prop                  shift and go to state 13
+
+state 10
+
+    (4) compound_prop -> LPAREN compound_prop OR . compound_prop RPAREN
+    (1) compound_prop -> . PROP_VAR
+    (2) compound_prop -> . NEG compound_prop
+    (3) compound_prop -> . LPAREN compound_prop AND compound_prop RPAREN
+    (4) compound_prop -> . LPAREN compound_prop OR compound_prop RPAREN
+    (5) compound_prop -> . LPAREN compound_prop ARROW compound_prop RPAREN
+    (6) compound_prop -> . LPAREN compound_prop IFF compound_prop RPAREN
+
+    PROP_VAR        shift and go to state 3
+    NEG             shift and go to state 2
+    LPAREN          shift and go to state 4
+
+    compound_prop                  shift and go to state 14
+
+state 11
+
+    (3) compound_prop -> LPAREN compound_prop AND compound_prop . RPAREN
+
+    RPAREN          shift and go to state 15
+
+
+state 12
+
+    (6) compound_prop -> LPAREN compound_prop IFF compound_prop . RPAREN
+
+    RPAREN          shift and go to state 16
+
+
+state 13
+
+    (5) compound_prop -> LPAREN compound_prop ARROW compound_prop . RPAREN
+
+    RPAREN          shift and go to state 17
+
+
+state 14
+
+    (4) compound_prop -> LPAREN compound_prop OR compound_prop . RPAREN
+
+    RPAREN          shift and go to state 18
+
+
+state 15
+
+    (3) compound_prop -> LPAREN compound_prop AND compound_prop RPAREN .
+
+    RPAREN          reduce using rule 3 (compound_prop -> LPAREN compound_prop AND compound_prop RPAREN .)
+    $end            reduce using rule 3 (compound_prop -> LPAREN compound_prop AND compound_prop RPAREN .)
+    AND             reduce using rule 3 (compound_prop -> LPAREN compound_prop AND compound_prop RPAREN .)
+    OR              reduce using rule 3 (compound_prop -> LPAREN compound_prop AND compound_prop RPAREN .)
+    ARROW           reduce using rule 3 (compound_prop -> LPAREN compound_prop AND compound_prop RPAREN .)
+    IFF             reduce using rule 3 (compound_prop -> LPAREN compound_prop AND compound_prop RPAREN .)
+
+
+state 16
+
+    (6) compound_prop -> LPAREN compound_prop IFF compound_prop RPAREN .
+
+    RPAREN          reduce using rule 6 (compound_prop -> LPAREN compound_prop IFF compound_prop RPAREN .)
+    $end            reduce using rule 6 (compound_prop -> LPAREN compound_prop IFF compound_prop RPAREN .)
+    AND             reduce using rule 6 (compound_prop -> LPAREN compound_prop IFF compound_prop RPAREN .)
+    OR              reduce using rule 6 (compound_prop -> LPAREN compound_prop IFF compound_prop RPAREN .)
+    ARROW           reduce using rule 6 (compound_prop -> LPAREN compound_prop IFF compound_prop RPAREN .)
+    IFF             reduce using rule 6 (compound_prop -> LPAREN compound_prop IFF compound_prop RPAREN .)
+
+
+state 17
+
+    (5) compound_prop -> LPAREN compound_prop ARROW compound_prop RPAREN .
+
+    RPAREN          reduce using rule 5 (compound_prop -> LPAREN compound_prop ARROW compound_prop RPAREN .)
+    $end            reduce using rule 5 (compound_prop -> LPAREN compound_prop ARROW compound_prop RPAREN .)
+    AND             reduce using rule 5 (compound_prop -> LPAREN compound_prop ARROW compound_prop RPAREN .)
+    OR              reduce using rule 5 (compound_prop -> LPAREN compound_prop ARROW compound_prop RPAREN .)
+    ARROW           reduce using rule 5 (compound_prop -> LPAREN compound_prop ARROW compound_prop RPAREN .)
+    IFF             reduce using rule 5 (compound_prop -> LPAREN compound_prop ARROW compound_prop RPAREN .)
+
+
+state 18
+
+    (4) compound_prop -> LPAREN compound_prop OR compound_prop RPAREN .
+
+    RPAREN          reduce using rule 4 (compound_prop -> LPAREN compound_prop OR compound_prop RPAREN .)
+    $end            reduce using rule 4 (compound_prop -> LPAREN compound_prop OR compound_prop RPAREN .)
+    AND             reduce using rule 4 (compound_prop -> LPAREN compound_prop OR compound_prop RPAREN .)
+    OR              reduce using rule 4 (compound_prop -> LPAREN compound_prop OR compound_prop RPAREN .)
+    ARROW           reduce using rule 4 (compound_prop -> LPAREN compound_prop OR compound_prop RPAREN .)
+    IFF             reduce using rule 4 (compound_prop -> LPAREN compound_prop OR compound_prop RPAREN .)
+

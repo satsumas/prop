@@ -2,7 +2,7 @@
 
 import ply.lex as lex
 
-# List of token names.   This is always required
+# List of token names. These are the syntactical objects in the propositional calculus -- propositional variables, connectives and parentheses.  
 tokens = (
    'PROP_VAR',
    'NEG',
@@ -14,7 +14,9 @@ tokens = (
    'RPAREN',
 )
 
-# Regular expression rules for simple tokens
+# Regular expression rules for tokens.
+# These define the patterns that substrings must match to count as a token of the named type.
+
 t_PROP_VAR    = r'[a-z]'
 t_NEG   = r'NOT' #Propositional variables are lower case and connectives are upper case to avoid prop_vars being found inside connectives.
 t_ARROW   = r'ARROW'

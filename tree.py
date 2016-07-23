@@ -20,12 +20,11 @@ class TraversibleExpression(object):
         if len(self.stack) > 0:
             if not myQtree._branches:
                 # Either, we can deal with the extra work immediately if we
-                # ourselves have no further branches:
+                # have no further branches:
                 myQtree._branches.append(
                         self.stack.pop().getSubTree(elideRoot=True))
             else:
-                # Or, we have branches, in which case we must punt the work
-                # deeper into the tree.
+                # Or, we have branches, in which case the work is deferred     		       # ('punted') deeper into the tree.
                 self.punt(copy.copy(self.stack))
                 myQtree = self.qtree(elideRoot=elideRoot)
         return myQtree
@@ -154,8 +153,8 @@ class PropVar(TraversibleExpression):
         self.stack.extend(stuff)
 
 
-if __name__ == "__main__": #if the file is being run as a program (and not being imported as a module)
+if __name__ == "__main__":
     expr = And(Or(PropVar('p'), PropVar('q')), PropVar('r'))
     print expr.render()
-
+	# testing
 
