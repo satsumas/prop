@@ -15,5 +15,8 @@ Lex: ~1974, Schmidt and Lesk
 Prop uses David Baezley's PLY (Python, Lex, Yacc) to compile propositional calculus.
 
 PLY consists of two modules:
-	`ply.lex`
-	`ply.yacc` 
+
+```python
+	ply.lex
+	ply.yacc
+``` 
