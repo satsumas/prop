@@ -31,9 +31,10 @@ premise1 = raw_input("Enter first premise (lower case only) ")
 premise2 = raw_input("Enter second premise (lower case only) ")
 
 #Store the value of p, q and r as p_val, q_val and r_val.
+#Currently just three propositional variables used in formulas.
 p_val = raw_input("What is the value of p? Enter T or F. ")
 if p_val in ["T", "t"]:
-    p = True #p is the bool that is the value of "P"
+    p = True 
 elif p_val in ["F","f"]:
     p = False
 else:
@@ -56,7 +57,7 @@ else:
     print "Enter T or F"
 
 """parser for binary connectives.
-will only accept expressions with two variables
+Will only accept expressions with two variables
 and a single connective: or, and, arrow, iff.
 """
 

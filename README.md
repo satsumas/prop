@@ -6,8 +6,8 @@ Definitions
 ===========
 In order to comprehend the formulas inputted to it, Prop needs to include a lexer and a parser. 
 
-A *lexer* converts an input into tokens.
-A *parser* uses grammar rules to convert a set of tokens into a syntax tree. 
+* A *lexer* converts an input into tokens.
+* A *parser* uses grammar rules to convert a set of tokens into a syntax tree. 
 
 Yacc ('Yet Another Compiler Compiler'): ~1973, Johnson
 Lex: ~1974, Schmidt and Lesk

@@ -1,3 +1,5 @@
+# This program lexes the inputted strings, by breaking them into tokens. Tokens are defined as substrings matching patterns, listed using regular expressions below.
+
 import ply.lex as lex
 
 # List of token names.   This is always required
@@ -53,6 +55,7 @@ if __name__ == "__main__":
     # Tokenize
     while True:
         tok = lexer.token()
-        if not tok: break      # No more input
+        if not tok: 
+		break      # No more input
         print tok
 
