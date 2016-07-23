@@ -6,11 +6,16 @@ An argument is *valid* if there is no interpretation of the propositional variab
 
 
 For example, consider the argument:
+
 P1. A or B
+
 P2. If A then C
+
 P3. not-B
 
+
 Conclusion: C
+
 
 This argument is valid just if there is no way to assign True or False to the propositional variables A, B, and C so that, according to the normal logical meaning of 'or', 'if...then', and 'not', we could have P1, P2, and P3 coming out True and the conclusion coming out False.
 
@@ -32,6 +37,7 @@ In order to comprehend the formulas inputted to it, Prop needs to include a lexe
 * A *parser* uses grammar rules to convert a set of tokens into a syntax tree. 
 
 Yacc ('Yet Another Compiler Compiler'): ~1973, Johnson
+
 Lex: ~1974, Schmidt and Lesk
 
 Prop uses David Baezley's PLY (Python, Lex, Yacc) to compile propositional calculus.
