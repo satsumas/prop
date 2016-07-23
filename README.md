@@ -24,7 +24,7 @@ One proof method for establishing the validity of an argument is the proof tree.
 
 
 #Definitions
-===========
+
 In order to comprehend the formulas inputted to it, Prop needs to include a lexer and a parser. 
 
 * A *lexer* converts an input into tokens.
