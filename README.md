@@ -1,5 +1,8 @@
 Prop is a program that determines the validity of an argument (i.e. a list of premises and a single conclusion) expressed in propositional calculus.
 
+Prop includes an interpreter to compile the propositional calculus inputs. Having established the validity of an argument, it outputs a demonstration of this, rendered as a tree proof in Latex.
+
+
 # Background
 
 An argument is *valid* if there is no interpretation of the propositional variables it is composed of that makes the premises all true and the conclusion false. In this sense, an interpretation can be understood as an assignment of True and False to the primitive propositional variables of the argument.
