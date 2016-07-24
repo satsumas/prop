@@ -34,6 +34,8 @@ class Not(TraversibleExpression):
     """
     NOT expression.  Can have one sub-expression.
     """
+    isComplex = False
+
     def __init__(self, sub):
         TraversibleExpression.__init__(self)
         self.sub = sub
@@ -42,6 +44,15 @@ class Not(TraversibleExpression):
     def render(self):
         return "Not(%s)" % (self.sub.render(),)
         #return "NOT " + self.sub.render()
+
+    def branch(self):
+        return r"%s" % (self.render())
+
+    def qtree(self, elideRoot=False):
+        return Qtree(self.render())
+
+    def punt(self, stuff):
+	    self.stack.extend(stuff)
 
 
 class Or(TraversibleExpression):
