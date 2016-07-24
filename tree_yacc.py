@@ -116,7 +116,7 @@ if result:
     f.write(tex_str)
     f.close()
 
-    os.system("pdflatex output.tex && open output.pdf")
+    os.system("pdflatex output.tex > /dev/null && open output.pdf")
 else:
     print "SOMETHING WENT WRONG :("
 
