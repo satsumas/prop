@@ -52,6 +52,8 @@ def p_compound_prop_IFF(p):
 def p_error(p):
     print "Syntax error in input!"
 
+
+
 # Build the parser
 parser = yacc.yacc()
 
@@ -81,15 +83,35 @@ Tree:
 \end{document} """ 
 
 s = raw_input('prop > ')
+
+
+"""
+TODO: this needs work -- figure out how to get fine-grained error handling. SHould be called if we have p_error
+# Check raw input is well-formed -- binary connectives need to be encased in parentheses.
+result = None
+raw_binary_connectives = ["OR", "AND", "IFF", "ARROW"]
+for bin_conn in raw_binary_connectives:
+    if bin_conn in s:
+        bin_conn_index = s.index(bin_conn)
+        left_index = bin_conn_index -2
+        right_index = bin_conn_index + 2
+	if s[left_index] != "(" or s[right_index] != ")":
+            error = "Binary connectives should be bracketed!"
+            print error
+	    break
+        else:
+            result = parser.parse(s) # result only chnages fron None if this error is not found
+    print "We've parsed this as %s " % result
+"""
+
+
 result = parser.parse(s) 
 print result
 
 
 if result:
     print result.getSubTree().render()
-
     tex_str = tex_str % (result.getSubTree().render(),)
-
     f = open("output.tex", "w")
     f.write(tex_str)
     f.close()
