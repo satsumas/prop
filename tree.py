@@ -16,16 +16,24 @@ class TraversibleExpression(object):
         """
         @return:  A Qtree instance.
         """
+        print "TraversibleExpression getSubtree on", self.render()
         myQtree = self.qtree(elideRoot=elideRoot)
         if len(self.stack) > 0:
             if not myQtree._branches:
                 # Either, we can deal with the extra work immediately if we
                 # have no further branches:
+                print "BEFORE STACK for", self.render(), ":", [s.render() for s in self.stack]
+                print "BEFORE BRANCHES for", myQtree, ":", myQtree._branches
                 myQtree._branches.append(
                         self.stack.pop().getSubTree(elideRoot=True))
+                print "ATFER STACK for", self.render(), ":", [s.render() for s in self.stack]
+                print "AFTER BRANCHES for", myQtree, ":", myQtree._branches
             else:
-                # Or, we have branches, in which case the work is deferred     		       # ('punted') deeper into the tree.
+                # Or, we have branches, in which case the work is deferred
+                # ('punted') deeper into the tree.
+                print "Punting into stack of", self.render(), "<-", [s.render() for s in self.stack]
                 self.punt(copy.copy(self.stack))
+                print "CALLING qtree a second time for some reason who knows"
                 myQtree = self.qtree(elideRoot=elideRoot)
         return myQtree
 
@@ -34,6 +42,7 @@ class Not(TraversibleExpression):
     """
     NOT expression.  Can have one sub-expression.
     """
+    # TODO Not sure if this is right.
     isComplex = False
 
     def __init__(self, sub):
@@ -52,7 +61,12 @@ class Not(TraversibleExpression):
         return Qtree(self.render())
 
     def punt(self, stuff):
-	    self.stack.extend(stuff)
+        print "Not(%s) punt(%s), extending own stack %s" % (
+            self.render(), 
+	    [s.render() for s in stuff], 
+	    [s.render() for s in self.stack],
+        )
+        self.stack.extend(stuff)
 
 
 class Or(TraversibleExpression):
@@ -81,6 +95,12 @@ class Or(TraversibleExpression):
 
 
     def punt(self, stuff):
+        print "Or(%s) punt(%s), extending lhs stack %s and rhs stack %s, my stack is %s" % (
+            self.render(), [s.render() for s in stuff],
+	    [s.render() for s in self.lhs.stack],
+	    [s.render() for s in self.rhs.stack],
+	    [s.render() for s in self.stack],
+        )
         self.lhs.stack.extend(stuff)
         self.rhs.stack.extend(stuff)
 
@@ -129,6 +149,12 @@ class And(TraversibleExpression):
 
 
     def punt(self, stuff):
+        print "And(%s) punt(%s), extending lhs stack %s and rhs stack %s, my stack is %s" % (
+            self.render(), [s.render() for s in stuff],
+	    [s.render() for s in self.lhs.stack],
+	    [s.render() for s in self.rhs.stack],
+	    [s.render() for s in self.stack],
+        )
         self.lhs.stack.extend(stuff)
         self.rhs.stack.extend(stuff)
 
@@ -161,11 +187,20 @@ class PropVar(TraversibleExpression):
 
 
     def punt(self, stuff):
-        self.stack.extend(stuff)
+        print "PropVar(%s) punt(%s), extending own stack %s" % (
+            self.render(), [s.render() for s in stuff],
+	    [s.render() for s in self.stack],
+        )
+        for s in stuff:
+            if s not in self.stack:
+                self.stack.append(s)
+            else:
+                print "FOUND A DUPE, IGNORING IT"
+        #self.stack.extend(stuff)
 
 
 if __name__ == "__main__":
     expr = And(Or(PropVar('p'), PropVar('q')), PropVar('r'))
     print expr.render()
-	# testing
+    # testing
 

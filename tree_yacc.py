@@ -110,7 +110,7 @@ print result
 
 
 if result:
-    print result.getSubTree().render()
+    #print result.getSubTree().render()
     tex_str = tex_str % (result.getSubTree().render(),)
     f = open("output.tex", "w")
     f.write(tex_str)

@@ -1,6 +1,7 @@
 """
 A presentation layer for generating LaTeX Qtree output.
 """
+import copy
 
 class Qtree(object):
     r"""
@@ -36,14 +37,22 @@ class Qtree(object):
         return "{%s}" % (self._root.replace("\n", r"\\"),)
 
 
-    def render(self):
+    def render(self, seen=None):
         """
         Sibling branches are rendered inside qtree by simply concatenating
         them.
         """
+        if seen is None:
+            seen = [self]
+        else:
+            seen.append(self)
+
         results = []
+        print repr(self._root) + ":" + hex(id(self)), "branches:", [b._root + ":" + hex(id(b)) for b in self._branches]
         for branch in self._branches:
-            results.append(branch.render())
+            if branch not in seen:
+                seen.append(branch)
+                results.append(branch.render(seen=copy.copy(seen)))
         return "[.%s %s ]" % (self._escapedRoot(), " ".join(results))
 
 
