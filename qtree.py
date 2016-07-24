@@ -48,11 +48,17 @@ class Qtree(object):
             seen.append(self)
 
         results = []
-        print repr(self._root) + ":" + hex(id(self)), "branches:", [b._root + ":" + hex(id(b)) for b in self._branches]
+        def _debug(q):
+            print repr(q._root) + ":" + hex(id(q)), "branches:", [b._root + ":" + hex(id(b)) for b in q._branches]
+	_debug(self)
         for branch in self._branches:
             if branch not in seen:
                 seen.append(branch)
                 results.append(branch.render(seen=copy.copy(seen)))
+            else:
+                print "SEEN YOU BEFORE! ==="
+		_debug(branch)
+		print "===================="
         return "[.%s %s ]" % (self._escapedRoot(), " ".join(results))
 
 
