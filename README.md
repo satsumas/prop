@@ -50,4 +50,11 @@ PLY consists of two modules:
 ```python
 	ply.lex
 	ply.yacc
-``` 
+```
+
+# Run prop
+Eventually prop will run on a web server. For now, to use it locally:
+
+1. Clone this repo
+2. Execute tree_yacc.py in an interactive python shell
+3. When prompted, enter a forumla of propositional calculus. Prop will render the .tex file containing the LaTex tree proof unpacking the formula, convert it to a .pdf inside the working directory. 
