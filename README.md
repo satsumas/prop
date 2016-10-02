@@ -58,3 +58,8 @@ Eventually prop will run on a web server. For now, to use it locally:
 1. Clone this repo
 2. Execute tree_yacc.py in an interactive python shell
 3. When prompted, enter a forumla of propositional calculus. Prop will render the .tex file containing the LaTex tree proof unpacking the formula, convert it to a .pdf inside the working directory. 
+
+## Tips
+* Bracket any binary connectived -- i.e. use `(p OR q)`, not `p OR q`
+* propositional variables are expressed with lower case letters: a, b, ..., p, q, ... etc
+* connectives are expressed in upper case: `AND`, `OR`, `ARROW`, `IFF`, `NEG`
