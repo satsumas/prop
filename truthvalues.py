@@ -2,15 +2,15 @@
 
 # Classes for truth functions of propositional logic expressions
 
-class Simple_exp(object)
+class Simple_exp(object):
     """
     A simple expression, i.e. a propositional variable.
     
     Define value(self) when creating the propositional variable.
     """
-    def__init__(self):
+    def __init__(self):
         pass
-    
+
 
 class Not_exp(object):
     """
