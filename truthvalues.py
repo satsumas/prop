@@ -10,7 +10,6 @@ class Simple_exp(object)
     """
     def__init__(self):
         pass
-
     
 
 class Not_exp(object):
