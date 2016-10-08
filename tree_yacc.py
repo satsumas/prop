@@ -83,7 +83,8 @@ Tree:
 \end{document} """ 
 
 s = raw_input('prop > ')
-
+prem1 = parser.parse(s)
+print prem1
 
 """
 TODO: this needs work -- figure out how to get fine-grained error handling. SHould be called if we have p_error
