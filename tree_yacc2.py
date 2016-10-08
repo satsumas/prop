@@ -82,8 +82,8 @@ print 'premises are %s and %s, conlusion is %s' % (s1, s2, c)
 print 'these are your propvars:' 
 print propvarfinder(s1, s2, c)
 
-print "prem1 is a %s" % prem1
-print str(prem2)
+print "prem1 is a %s " % prem1
+
 
 # The parser turns my raw input into Python objects from defined classes. 
 # Each class has a function for turning its instances into Sympy objects.
@@ -94,5 +94,9 @@ if __name__=="__main__":
         print k, '=', v
 """
 
-print "SYMPYING prem1!" + str(prem1.sympy_me())
+print prem1.sympy_me()
+
+print type(prem1.sympy_me())
+
+print "    SYMPYING prem1!    :   " + str(prem1.sympy_me())
 
