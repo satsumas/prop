@@ -57,7 +57,7 @@ class Not_exp(TraversibleExpression):
   
     def sympy_me(self, sub):
         # Model this on the recursive render function
-        return ~(sympy_me(sub))
+        return ~(sub.sympy_me())
 
 
 
@@ -76,8 +76,8 @@ class Or_exp(TraversibleExpression):
         return "Or(%s, %s)" % (self.lhs.render(), self.rhs.render())
         #return "(" + self.lhs.render() + " OR " + self.rhs.render() + ")"
    
-    def sympy_me(self, lhs, rhs):
-        return sympy_me(lhs) | sympy_me(rhs)
+    def sympy_me(self):
+        return self.lhs.sympy_me() | self.rhs.sympy_me()
 
 
 class And_exp(TraversibleExpression):
@@ -95,7 +95,7 @@ class And_exp(TraversibleExpression):
         return "And(%s, %s)" % (self.lhs.render(), self.rhs.render())
 
     def sympy_me(self):
-        return sympy_me(lhs) & sympy_me(rhs)
+        return self.lhs.sympy_me() & self.rhs.sympy_me()
 
 
 class PropVar(TraversibleExpression):
