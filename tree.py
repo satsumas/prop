@@ -45,7 +45,7 @@ class Not_exp(TraversibleExpression):
     NOT expression.  Can have one sub-expression.
     """
     # TODO Not sure if this is right.
-    isComplex = False
+    isComplex = True
 
     def __init__(self, sub):
         TraversibleExpression.__init__(self)
@@ -55,9 +55,8 @@ class Not_exp(TraversibleExpression):
         return "Not(%s)" % (self.sub.render(),)
         #return "NOT " + self.sub.render() 
   
-    def sympy_me(self, sub):
-        # Model this on the recursive render function
-        return ~(sub.sympy_me())
+    def sympy_me(self):
+        return ~(self.sub.sympy_me())
 
 
 

@@ -13,13 +13,10 @@ compound_prop:  | PROP_VAR
 """
 
 import os
-
 import ply.yacc as yacc
-
 from tree import Or_exp, Not_exp, And_exp, PropVar
-
 from lexer import tokens, tokenise
-
+from sympy.logic.inference import satisfiable
 
 # The following functions are based on David Baezley's parser. The indices that are used in the functions correspond to the words, in order, in the doc strings.
 # The functions describe the relationship between different types of propositional formula, indicated by the BNF grammar above.
@@ -77,26 +74,43 @@ propvarfinder(s1, s2, c)
 prem1 = parser.parse(s1)
 prem2 = parser.parse(s2)
 conclusion = parser.parse(c)
-print 'premises are %s and %s, conlusion is %s' % (s1, s2, c)
-
-print 'these are your propvars:' 
-print propvarfinder(s1, s2, c)
-
-print "prem1 is a %s " % prem1
-
 
 # The parser turns my raw input into Python objects from defined classes. 
 # Each class has a function for turning its instances into Sympy objects.
 
 """
+Test staements
 if __name__=="__main__":
     for k, v in globals().items():
         print k, '=', v
-"""
+
+print 'these are your propvars:' 
+print propvarfinder(s1, s2, c)
+
+print "prem1 is a %s " % prem1
+print "prem2 is a %s " % prem2
+print "conclusion is a %s " % conclusion
 
 print prem1.sympy_me()
+print prem2.sympy_me()
+print conclusion.sympy_me()
 
 print type(prem1.sympy_me())
+print type(prem2.sympy_me())
+print type(conclusion.sympy_me())
+"""
 
-print "    SYMPYING prem1!    :   " + str(prem1.sympy_me())
+def validity_checker(premise_conjunction, conclusion_negation):
+    if satisfiable(premise_conjunction & conclusion_negation):
+        print "This argument is not valid. Premises true, conlusion false if: ", satisfiable(premise_conjunction & conclusion_negation)
+        return  satisfiable(premise_conjunction & conclusion_negation) 
+    else:
+        print "Argument valid!"
+        return  satisfiable(premise_conjunction & conclusion_negation)
+
+
+p_c = prem1.sympy_me() & prem2.sympy_me()
+c_n = ~conclusion.sympy_me()
+
+validity_checker(p_c, c_n)
 
