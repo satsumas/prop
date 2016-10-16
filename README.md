@@ -33,6 +33,9 @@ In general, arguments may be much more complex than [P1, P2, P3, C] above, and t
 When given the valid argument used above:
 <img src = "/prop_example_validargument.gif"> 
 
+When given an invalid argument:
+<img src = "/prop_example_invalidargument.gif">
+
 #Definitions
 
 In order to interpret the raw content inputted to it as propositional calculus syntax, Prop includes a lexer and a parser. 
