@@ -1,16 +1,18 @@
 #!/usr/bin/python
 
 from qtree import Qtree
+from sympy import *
+from sympy.core import symbols
+from sympy.logic.boolalg import Or, And, Not, Implies, Equivalent
 import copy
 
 class TraversibleExpression(object):
     """
-    An expression which knows how to generate its own tree for propositional
-    logic.
+    An expression in propositional logic that can generate a tree proof style tree
+    and generate a corresponding object using Python Sympy objects.
     """
     def __init__(self):
         self.stack = []
-
 
     def getSubTree(self, elideRoot=False):
         """
@@ -38,22 +40,21 @@ class TraversibleExpression(object):
         return myQtree
 
 
-class Not(TraversibleExpression):
+class Not_exp(TraversibleExpression):
     """
     NOT expression.  Can have one sub-expression.
     """
     # TODO Not sure if this is right.
-    isComplex = False
+    isComplex = True
 
     def __init__(self, sub):
         TraversibleExpression.__init__(self)
         self.sub = sub
 
-
     def render(self):
         return "Not(%s)" % (self.sub.render(),)
-        #return "NOT " + self.sub.render()
-
+        #return "NOT " + self.sub.render() 
+  
     def branch(self):
         return r"%s" % (self.render())
 
@@ -68,8 +69,12 @@ class Not(TraversibleExpression):
         )
         self.stack.extend(stuff)
 
+    def sympy_me(self):
+        return ~(self.sub.sympy_me())
 
-class Or(TraversibleExpression):
+
+
+class Or_exp(TraversibleExpression):
     """
     OR expression.  Can have sub-expressions.
     """
@@ -80,11 +85,9 @@ class Or(TraversibleExpression):
         self.lhs = lhs
         self.rhs = rhs
 
-
     def render(self):
         return "Or(%s, %s)" % (self.lhs.render(), self.rhs.render())
         #return "(" + self.lhs.render() + " OR " + self.rhs.render() + ")"
-
 
     def qtree(self, elideRoot=False):
         if elideRoot:
@@ -92,7 +95,6 @@ class Or(TraversibleExpression):
         else:
             text = self.render()
         return Qtree(text, [self.lhs.getSubTree(), self.rhs.getSubTree()])
-
 
     def punt(self, stuff):
         print "Or(%s) punt(%s), extending lhs stack %s and rhs stack %s, my stack is %s" % (
@@ -104,9 +106,10 @@ class Or(TraversibleExpression):
         self.lhs.stack.extend(stuff)
         self.rhs.stack.extend(stuff)
 
+    def sympy_me(self):
+        return self.lhs.sympy_me() | self.rhs.sympy_me()
 
-
-class And(TraversibleExpression):
+class And_exp(TraversibleExpression):
     """
     AND expression.  Can have sub-expressions.
     """
@@ -117,14 +120,11 @@ class And(TraversibleExpression):
         self.lhs = lhs
         self.rhs = rhs
 
-
     def render(self):
         return "And(%s, %s)" % (self.lhs.render(), self.rhs.render())
 
-
     def _newlineHead(self):
         return "%s\n%s" % (self.lhs.render(), self.rhs.render())
-
 
     def qtree(self, elideRoot=False):
         """
@@ -147,7 +147,6 @@ class And(TraversibleExpression):
         else:
             return Qtree(self.render(), [innerQtree])
 
-
     def punt(self, stuff):
         print "And(%s) punt(%s), extending lhs stack %s and rhs stack %s, my stack is %s" % (
             self.render(), [s.render() for s in stuff],
@@ -157,6 +156,8 @@ class And(TraversibleExpression):
         )
         self.lhs.stack.extend(stuff)
         self.rhs.stack.extend(stuff)
+    def sympy_me(self):
+        return self.lhs.sympy_me() & self.rhs.sympy_me()
 
 
 class PropVar(TraversibleExpression):
@@ -169,14 +170,11 @@ class PropVar(TraversibleExpression):
         TraversibleExpression.__init__(self)
         self.name = name
 
-
     def render(self):
         return self.name
 
-
     def branch(self):
         return r"%s" % (self.render())
-
 
     def qtree(self, elideRoot=False):
         """
@@ -184,7 +182,6 @@ class PropVar(TraversibleExpression):
         into the LaTeX we want to output.
         """
         return Qtree(self.render())
-
 
     def punt(self, stuff):
         print "PropVar(%s) punt(%s), extending own stack %s" % (
@@ -199,8 +196,12 @@ class PropVar(TraversibleExpression):
         #self.stack.extend(stuff)
 
 
-if __name__ == "__main__":
-    expr = And(Or(PropVar('p'), PropVar('q')), PropVar('r'))
-    print expr.render()
-    # testing
 
+    def sympy_me(
+      "returns a sympy Symbol"
+      return ify(self.name)
+
+if __name__ == "__main__":
+    expr = And_exp(Or_exp(PropVar('p'), PropVar('q')), PropVar('r'))
+    print expr.sympy_me()
+    # testing
