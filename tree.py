@@ -197,11 +197,13 @@ class PropVar(TraversibleExpression):
 
 
 
-    def sympy_me(
-      "returns a sympy Symbol"
-      return ify(self.name)
+    def sympy_me(self):
+        """
+        returns a sympy Symbol
+        """
+        return sympify(self.name)
 
-if __name__ == "__main__":
-    expr = And_exp(Or_exp(PropVar('p'), PropVar('q')), PropVar('r'))
-    print expr.sympy_me()
-    # testing
+    if __name__ == "__main__":
+        expr = And_exp(Or_exp(PropVar('p'), PropVar('q')), PropVar('r'))
+        print expr.sympy_me()
+        # testing

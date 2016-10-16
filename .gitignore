@@ -1,3 +1,5 @@
 .DS_Store
 redherrings
 *.pyc
+*.swp
+*.swn
