@@ -31,7 +31,7 @@ In general, arguments may be much more complex than [P1, P2, P3, C] above, and t
 # Prop in action
 
 When given the valid argument used above:
-<img src = "/prop_example_validargument.gif"> 
+<img src = "/prop_example_validargument.gif">     
 
 
 
