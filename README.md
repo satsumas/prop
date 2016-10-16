@@ -28,8 +28,10 @@ This reasoning tells us that if all the premises are true, then the conclusion m
  
 In general, arguments may be much more complex than [P1, P2, P3, C] above, and their validity is harder to determine in a non-methodological way. In particular, there may be _many ways_ for their premises to be true -- just as 'A or B or C' can be true if any one of those propositional variables is true, or if any two of them are, or all of them are.
 
-One proof method for establishing the validity of an argument is the proof tree. Prop produces a diagramatic representation of a proof tree, rendered in Latex, using the Latex package qtree.
+# Prop in action
 
+When given the valid argument used above:
+<img src = "/prop_example_validargument.gif"> 
 
 #Definitions
 
