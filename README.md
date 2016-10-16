@@ -44,9 +44,9 @@ Prop uses a lexer (lexer.py) to convert raw input recieved on stdin into proposi
 Prop's parser takes the lexed input, and uses a BNF grammar to establish the type of each input. The type of an input can be either:
 
 * `PropVar`: a propositional variable, the simmplest kind of expression
-* `And_exp`: an expression composed of other expressions, in which 'And' has the widest scope. Something of the form ($\Psi And $\Phi). 
-* `Or_exp`: an expression composed of other expressions, in which 'Or' has the widest scope. Something of the form ($\Psi Or $\Phi).
-* `Not_exp`: an expression composed of other expressions, in which 'Not' has the widest scope. Something of the form $\neg $\Psi.
+* `And_exp`: an expression composed of other expressions, in which 'And' has the widest scope. Something of the form (p And q). 
+* `Or_exp`: an expression composed of other expressions, in which 'Or' has the widest scope. Something of the form (p Or q).
+* `Not_exp`: an expression composed of other expressions, in which 'Not' has the widest scope. Something of the form NOT p.
 
     Note that the raw input may additionally include 'if ... then' (conditional) expressions, and 'iff' (biconditional) expressions. Logical equivalence rules <sup>[1](#myfootnote1)</sup> mean that we can treat these as a combination of the expressions above.
     
