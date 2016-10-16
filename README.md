@@ -49,7 +49,7 @@ In order to interpret the raw content inputted to it as propositional calculus s
 
 * A *parser* uses grammar rules to convert a set of tokens into a syntax tree. 
 
-Prop uses a lexer (lexer.py) to convert raw input recieved on stdin into propositional logic. The lexer uses regular expressions to identify symbols from the propositional calculus, along with their precedence rules. Using these rules, the lexer 'tokenises' raw input into logical symbols.
+Prop uses a lexer (lexer.py) to convert raw input received via prompting into propositional logic. The lexer uses regular expressions to identify symbols from the propositional calculus, along with their precedence rules. Using these rules, the lexer 'tokenises' raw input into logical symbols.
 
 Prop's parser takes the lexed input, and uses a BNF grammar to establish the type of each input. The type of an input can be either:
 
