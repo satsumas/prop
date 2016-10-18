@@ -14,6 +14,9 @@ class TraversibleExpression(object):
     def __init__(self):
         self.stack = []
 
+    def __repr__(self):
+        return str(self)
+
     def getSubTree(self, elideRoot=False):
         """
         @return:  A Qtree instance.
@@ -44,7 +47,6 @@ class Not_exp(TraversibleExpression):
     """
     NOT expression.  Can have one sub-expression.
     """
-    # TODO Not sure if this is right.
     isComplex = True
 
     def __init__(self, sub):
