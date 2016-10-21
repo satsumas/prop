@@ -12,7 +12,7 @@ compound_prop:  | PROP_VAR
                 | NEG compound_prop
 """
 
-import os
+import os, sys
 import ply.yacc as yacc
 from tree import Or_exp, Not_exp, And_exp, PropVar
 from lexer import tokens, tokenise
@@ -55,50 +55,38 @@ def p_error(p):
 # Build the parser
 parser = yacc.yacc()
 
+# Prompt the user for input
+premise_number = int(raw_input('How many premises does your argument have? '))
+print premise_number
 
-s1 = raw_input('first premiss > ')
-s2 = raw_input('second premiss > ')
-c = raw_input('conclusion > ')
+premises = []
+for i in range(1, premise_number +1):
+    s_i = raw_input('Enter premise number: %s ' %  str(i))
+    premises.append(s_i)
+c = raw_input('Conclusion >')
 
 
-def propvarfinder(string1, string2, conclusion):
+
+# This function isn't currently used. It finds the propositional variables in the input.
+def propvarfinder(string_list):
   propvars = []
-  for string in (string1, string2, conclusion):
+  for string in (string_list):
       for tok in tokenise(string):
           if tok.type == 'PROP_VAR' and tok.value not in propvars:
               propvars.append(tok.value)
   return propvars
 
-propvarfinder(s1, s2, c)
+# Parse the user's inputted premises and conclusion
+parsed_premises = []
 
-prem1 = parser.parse(s1)
-prem2 = parser.parse(s2)
-conclusion = parser.parse(c)
+for string in premises:
+    parsed_premises.append(parser.parse(string))
+c = parser.parse(c)
+
 
 # The parser turns my raw input into Python objects from defined classes. 
 # Each class has a function for turning its instances into Sympy objects.
 
-"""
-Test staements
-if __name__=="__main__":
-    for k, v in globals().items():
-        print k, '=', v
-
-print 'these are your propvars:' 
-print propvarfinder(s1, s2, c)
-
-print "prem1 is a %s " % prem1
-print "prem2 is a %s " % prem2
-print "conclusion is a %s " % conclusion
-
-print prem1.sympy_me()
-print prem2.sympy_me()
-print conclusion.sympy_me()
-
-print type(prem1.sympy_me())
-print type(prem2.sympy_me())
-print type(conclusion.sympy_me())
-"""
 
 def validity_checker(premise_conjunction, conclusion_negation):
     if satisfiable(premise_conjunction & conclusion_negation):
@@ -108,9 +96,13 @@ def validity_checker(premise_conjunction, conclusion_negation):
         print "Argument valid!"
         return  satisfiable(premise_conjunction & conclusion_negation)
 
+premise_conj = parsed_premises[0].sympy_me()
+for premise in parsed_premises:
+    premise_conj = premise_conj & premise.sympy_me()
+    
+print premise_conj
 
-p_c = prem1.sympy_me() & prem2.sympy_me()
-c_n = ~conclusion.sympy_me()
+conclusion_neg = ~c.sympy_me()
 
-validity_checker(p_c, c_n)
+validity_checker(premise_conj, conclusion_neg)
 
