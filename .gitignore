@@ -1,5 +1,12 @@
 .DS_Store
-redherrings
+
 *.pyc
 *.swp
 *.swn
+
+parser.out
+output.aux
+output.log
+parsetab.py
+
+twistd.*
