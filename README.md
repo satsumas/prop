@@ -1,4 +1,4 @@
-[!][AUR](https:/img.shields.io/aur/license/yaourt.svg)]()
+<img src = https:/img.shields.io/aur/license/yaourt.svg>
 
 Prop is a program that determines the validity of an argument in propositional logic. An argument, in this sense, is a list of premises and a single conclusion.
 
