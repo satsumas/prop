@@ -1,3 +1,5 @@
+[!][AUR](https:/img.shields.io/aur/license/yaourt.svg)]()
+
 Prop is a program that determines the validity of an argument in propositional logic. An argument, in this sense, is a list of premises and a single conclusion.
 
 Having established the validity of an argument, Prop outputs a demonstration of this, rendered as a tree proof in Latex.
@@ -77,10 +79,15 @@ Eventually prop will run on a web server. For now, to use it locally:
 2. Execute prop_yacc.py in an interactive python shell
 3. When prompted, enter a forumla of propositional calculus. Prop will return a message indicating whether or not the argument is valid, and if it is _not_ valid, will state which assignment of truth values to propositional variables witnesses this by making premises true, conclusion false.
 
-## Tips
+## Input
 * Bracket any binary connectived -- i.e. use `(p OR q)`, not `p OR q`
 * propositional variables are expressed with lower case letters: a, b, ..., p, q, ... etc
 * connectives are expressed in upper case: `AND`, `OR`, `ARROW`, `IFF`, `NOT` (to avoid PopVars being inadvertently found inside connectives)
 
+
+# To Do
+
+* Flask frontend
+* Tree proof generation in Latex 
 
 <a name="myfootnote1">1</a>: All propositional formulas can be converted to a formula in [Disjunctive Normal Form](https://en.wikipedia.org/wiki/Disjunctive_normal_form#Conversion_to_DNF), which is to say a formula using just conjunctions (ANDs), disjunctions (ORs) and negations (NOTs).
