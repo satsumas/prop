@@ -1,10 +1,7 @@
 
 <img src = "https://img.shields.io/badge/License-GPL%20v3-blue.svg">
 
-
-
-[! [License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
-
+#Prop
 Prop is a program that determines the validity of an argument in propositional logic. An argument, in this sense, is a list of premises and a single conclusion.
 
 Having established the validity of an argument, Prop outputs a demonstration of this, rendered as a tree proof in Latex.
