@@ -75,11 +75,27 @@ Yacc ('Yet Another Compiler Compiler'): ~1973, Johnson
 Lex: ~1974, Schmidt and Lesk
 
 # Run prop
-Eventually prop will run on a web server. For now, to use it locally:
+Eventually Prop will run on a web server. For now, the easiest way to use it locally is with Docker:
 
+###Method 1
+Prerequisites: Docker
+
+1. Download the Docker image using `docker pull hodesdon/prop`
+2. Run the container built from the Docker image using `docker run -ti hodesdon/prop`
+3. The command line in the container will prompt you for the number of premises for your argument. 
+Enter the number of premises and then each premise as prompted.
+
+
+Alternatively, to run Prop:
+
+###Method 2
+Prerequisites: Python, [Sympy](http://docs.sympy.org/dev/install.html), [Ply](http://www.dabeaz.com/ply/)
+ 
 1. Clone this repo
-2. Execute prop_yacc.py in an interactive python shell
-3. When prompted, enter a forumla of propositional calculus. Prop will return a message indicating whether or not the argument is valid, and if it is _not_ valid, will state which assignment of truth values to propositional variables witnesses this by making premises true, conclusion false.
+2.`cd` into the Prop directory
+4. Execute `prop_yacc.py` in an interactive python shell by typing `python prop_yacc.py`.
+5. The command line will prompt you for the number of premises for your argument. 
+Enter the number of premises and then each premise as prompted.
 
 ## Input
 * Bracket any binary connectived -- i.e. use `(p OR q)`, not `p OR q`
